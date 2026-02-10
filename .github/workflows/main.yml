@@ -1,0 +1,32 @@
+name: Daily Mordor Sync
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every night at midnight
+  workflow_dispatch:      # Allows you to run it manually with one click
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install google-auth-oauthlib google-api-python-client google-auth
+
+      - name: Run Sync Script
+        run: python journey.py --auto # We'll add a small tweak to your code for this
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'Mordor Bot'
+          git config --global user.email 'bot@mordor.com'
+          git add stats.json
+          git commit -m "Automated Daily Walk Update" || echo "No changes to commit"
+          git push
