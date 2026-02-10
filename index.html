@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Walk to Mordor</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #1a1a1a; color: white; }
+        #progress-container { width: 80%; background: #333; margin: 20px auto; border-radius: 10px; }
+        #progress-bar { height: 30px; background: #f39c12; width: 0%; border-radius: 10px; transition: width 1s; }
+    </style>
+</head>
+<body>
+    <h1>Quest to Mount Doom</h1>
+    <div id="status">Loading journey...</div>
+    <div id="progress-container"><div id="progress-bar"></div></div>
+    <h2 id="location">---</h2>
+    <p id="lore">---</p>
+
+    <script>
+        // This script reads the JSON file that Python updates
+        fetch('stats.json')
+            .then(response => response.json())
+            .then(data => {
+                const miles = data.total_miles;
+                const percent = Math.min((miles / 1350) * 100, 100);
+                document.getElementById('progress-bar').style.width = percent + '%';
+                document.getElementById('status').innerText = miles.toFixed(2) + " / 1350 miles";
+            });
+    </script>
+</body>
+</html>
